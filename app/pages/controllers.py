@@ -9,4 +9,8 @@ page = Blueprint("page", __name__)
 @page.route("/profile")
 @login_required
 def profile():
-    return render_template("page/profile.html", name=current_user.name)
+    return render_template(
+        "page/profile.html",
+        name=current_user.name,
+        title=current_user.name,
+    )

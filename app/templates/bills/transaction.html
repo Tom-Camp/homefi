@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-6 is-6-fullhd is-6-desktop is-6-tablet is-12-mobile card">
+        <header class="card-header {{ 'has-background-warning-light' if t.Transaction.status == 'pending' else 'has-background-success-light' }} has-text-black-bis">
+            <p class="card-header-title title is-4">Paid to: {{ t.Account.name }}</p>
+        </header>
+        <div class="card-content">
+            <p class="title is-4 has-text-bold">{{ "$%.2f"|format(t.Transaction.amount) }}</p>
+            <p class="title is-5">Status: {{ t.Transaction.status }}</p>
+            <p class="title is-6">Paid on: {{ t.Transaction.date.strftime('%d %B %Y') }}</p>
+        </div>
+        <footer class="card-footer">
+            <a href="{{ url_for('bills.transaction_edit', tid=t.Transaction.id) }}" class="card-footer-item">Edit</a>
+            <a href="{{ url_for('bills.transaction_show', tid=t.Transaction.id) }}" class="card-footer-item">Delete</a>
+        </footer>
+    </div>
+</div>
+{% endblock %}

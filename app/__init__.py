@@ -19,10 +19,12 @@ def create_app():
         return render_template("404.html"), 404
 
     from app.auth.controllers import auth as auth_module
+    from app.bills.controllers import bills
     from app.pages.controllers import page
 
     app.register_blueprint(auth_module)
     app.register_blueprint(page)
+    app.register_blueprint(bills)
 
     db.init_app(app)
     with app.app_context():

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="columns is-centered">
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Name</label>
+            </div>
+            <div class="control">
+                {{ form.name(class="input", placeholder="Name") }}
+            </div>
+        </div>
+        <div class="field is-horizontal has-addon">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Recurrence</label>
+            </div>
+            <div class="control">
+                <div class="select">
+                    {{ form.recurrence }}
+                </div>
+            </div>
+            <div class="control">
+                <div class="select">
+                    {{ form.pay_period }}
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Balance</label>
+            </div>
+            <div class="control m-1">$</div>
+            <div class="control is-horizontal">
+                {{ form.outstanding(class="input", placeholder="ie: 200") }}
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">APR</label>
+            </div>
+            <div class="control m-1">%</div>
+            <div class="control">
+                {{ form.apr(class="input", placeholder="ie: 3.9") }}
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Label</label>
+            </div>
+            <div class="control">
+                {{ form.tag(class="input", placeholder="ie: Pets") }}
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">URL</label>
+            </div>
+            <div class="control">
+                {{ form.url(class="input") }}
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="control">
+                <label class="checkbox">
+                    {{ form.status(class="checkbox") }}
+                    {{ form.status.label }}
+                </label>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button is-link is-light">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

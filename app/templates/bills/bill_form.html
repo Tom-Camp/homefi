@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-6 is-6-fullhd is-6-desktop is-6-tablet is-12-mobile card">
+        <form method="POST" class="is-medium">
+        {{ form.csrf_token }}
+        <header class="card-header">
+            <p class="card-header-title title is-4">Pay {{ name }}</p>
+        </header>
+        <div class="card-content">
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Amount</label>
+            </div>
+            <div class="control">
+            {{ form.amount(class_="input", placeholder="ie: 200.00") }}
+            </div>
+            <div class="field-label is-normal">
+                <label class="label has-text-left">Status</label>
+            </div>
+            <div class="select">
+            {{ form.status }}
+            </div>
+        </div>
+        <footer class="card-footer">
+            <a class="card-footer-item">Submit</a>
+            <a class="card-footer-item">Cancel</a>
+        </footer>
+        </form>
+    </div>
+</div>
+{% endblock %}

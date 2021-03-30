@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Account Name</th>
+            <th>Balance</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for a in accts %}
+        <tr>
+            <td>{{ a.id }}</td>
+            <td>{{ a.name }}</td>
+            <td>{{ a.outstanding }}</td>
+            <td><a href="/account/{{ a.id }}" class="">View</a></td>
+            <td><a href="/account/{{ a.id }}/pay" class="">Pay</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

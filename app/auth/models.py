@@ -29,6 +29,8 @@ class User(UserMixin, Base):
     email = db.Column(db.String(128), nullable=False, unique=True)
     password = db.Column(db.String(192), nullable=False)
     status = db.Column(db.SmallInteger, nullable=False)
+    account = db.relationship("Account")
+    transaction = db.relationship("Transaction")
 
     def __init__(self, name, email, password):
 
@@ -39,3 +41,12 @@ class User(UserMixin, Base):
 
     def __repr__(self):
         return "<User %r>" % (self.name)
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return True

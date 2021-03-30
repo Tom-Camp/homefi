@@ -31,7 +31,7 @@ class RegistrationForm(FlaskForm):
         "Username",
         [
             validators.DataRequired(),
-            validators.Length(min=4, max=25),
+            validators.Length(min=3, max=25),
         ],
     )
     email = EmailField(

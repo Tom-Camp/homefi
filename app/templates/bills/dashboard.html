@@ -1,0 +1,37 @@
+{% set total = namespace(value=0) %}
+{% extends 'base.html' %}
+{% block content %}
+<section class="columns">
+    <div class="column">
+        <h5>Accounts</h5>
+        {%- for a in content.account %}
+            <a href="{{ url_for('bills.account_show', aid = a.id) }}" class="mb-1 is-light button is-fullwidth">{{ a.name }}</a>
+        {% endfor -%}
+        <a href="{{ url_for('bills.account_create') }}" class="button mb-1 is-fullwidth is-info">Add Account</a>
+        <a href="/account/list" class="button is-fullwidth is-success">Pay Bills</a>
+    </div>
+    <div class="column">
+        <h5>Pending</h5>
+        {%- if content.pending is defined %}
+            {% for p in content.pending %}
+            <a href="{{ url_for('bills.transaction_show', tid=p.Transaction.id) }}" class="mb-1 has-background-warning-light button is-fullwidth">
+                <div class="column has-text-left"> {{ p.Account.name }}</div>
+                <div class="column has-text-right">{{ "$%.2f"|format(p.Transaction.amount) }}</div>
+            </a>
+            {% set total.value = total.value + p.Transaction.amount %}
+            {% endfor %}
+            <p class="button is-fullwidth has-text-right has-text-weight-bold">Total pending {{ "$%.2f"|format(total.value) }}</p>
+        {% else %}
+        <p class="button is-fullwidth is-warning">No pending transactions.</p>
+        {% endif -%}
+    </div>
+    <div class="column">
+        <h5>Debt</h5>
+        {%- if content.pd.owed is defined %}
+        {%- for d in content.pd.owed %}
+        <p class="button is-fullwidth">{{ d.name }}: ${{ "{:,.2f}".format(d.outstanding) }}</p>
+        {% endfor -%}
+        {% endif -%}
+    </div>
+</section>
+{% endblock %}

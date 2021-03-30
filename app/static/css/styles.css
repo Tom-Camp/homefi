@@ -10197,3 +10197,9 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem;
 }
+
+ul.is-unstyled {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
