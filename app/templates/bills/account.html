@@ -1,36 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="columns is-centered">
-    <div class="column is-4 is-4-fullhd is-4-desktop is-6-tablet is-10-mobile">
-        {% if acct.recurrence == "monthly" %}
+    <div class="column">
+        <h5>Account Info</h5>
+        {% if account.recurrence == "monthly" %}
         <p class="button is-fullwidth mb-1">This bill recurs monthly</p>
         {% endif %}
-        {% if acct.pay_period|length %}
-        <p class="button is-fullwidth mb-1">Pay this bill after getting paid on the {{ acct.pay_period }}th</p>
+        {% if account.pay_period|length %}
+        <p class="button is-fullwidth mb-1">Pay after payday on the {{ account.pay_period }}th</p>
         {% endif %}
-        <p class="button is-fullwidth mb-1 {{ 'has-background-success-light' if acct.status == 1 else 'has-background-warning-light' }}">This account is  {{ "active" if acct.status == 1 else "inactive" }}</p>
-        {% if acct.outstanding > 0 %}
-        <p class="button is-fullwidth has-background-danger-light mb-1">Outstanding:  {{ "${:,.2f}".format(acct.outstanding) }}</p>
+        <p class="button is-fullwidth mb-1 {{ 'has-background-success-light' if account.status == 1 else 'has-background-warning-light' }}">This account is  {{ "active" if account.status == 1 else "inactive" }}</p>
+        {% if account.outstanding > 0 %}
+        <p class="button is-fullwidth has-background-danger-light mb-1">Outstanding:  {{ "${:,.2f}".format(account.outstanding) }}</p>
         {% endif %}
-        {% if acct.apr > 0 %}
-        <p class="button is-fullwidth mb-1">APR:  {{ "$%.2f"|format(acct.apr|float) }}%</p>
+        {% if account.apr > 0 %}
+        <p class="button is-fullwidth mb-1">APR:  {{ "$%.2f"|format(account.apr|float) }}%</p>
         {% endif %}
-        {% if acct.tag|length %}
-        <p class="button is-fullwidth mb-1">Filed under:  {{ acct.tag }}</p>
+        {% if account.tag|length %}
+        <p class="button is-fullwidth mb-1">Filed under:  {{ account.tag }}</p>
         {% endif %}
-        {% if acct.url|length %}
-        <a class="button is-fullwidth is-info" href="{{ acct.url }}" target="_blank" rel="noopener noreferrer">Website</a>
+        {% if account.url|length %}
+        <a class="button is-fullwidth is-info mb-1" href="{{ account.url }}" target="_blank" rel="noopener noreferrer">Website</a>
         {% endif %}
-        <a class="button is-fullwidth is-warning" href="{{ url_for('bills.account_edit', aid = acct.id) }}">Edit</a>
+        <a class="button is-fullwidth is-warning" href="{{ url_for('bills.account_edit', aid = account.id) }}">Edit</a>
     </div>
     <div class="column">
-        {% if tr is defined %}
-        {% for t in tr %}
-            <div class="box">
-                {{ t.name }}
-            </div>
-        {% endfor %}
-        {% endif %}
+        <h5>Transactions</h5>
+        {% include "bills/transaction_list.html" %}
+    </div>
+    <div class="column">
+
     </div>
 </div>
 {% endblock %}

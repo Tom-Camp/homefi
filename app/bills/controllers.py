@@ -110,10 +110,12 @@ def account_edit_submit(aid):
 @login_required
 def account_show(aid):
     a = Account.query.get(aid)
+    t = Transaction.query.filter_by(aid=aid).order_by(Transaction.date.desc())
     return render_template(
         "bills/account.html",
-        acct=a,
+        account=a,
         title=a.name,
+        transactions=t,
     )
 
 
@@ -132,24 +134,20 @@ def account_list():
 @bills.route("/account/<aid>/pay", methods=["GET"])
 @login_required
 def transaction_create(aid):
-    a = db.session.query(Account).with_entities(Account.name)
-    a.filter_by(id=aid).one()
+    a = db.session.query(Account).filter_by(id=aid).one()
     form = TransactionCreate(request.form)
-
-    if request.method == "GET":
-        form.aid.data = aid
 
     return render_template("bills/bill_form.html", form=form, account=a)
 
 
 @bills.route("/account/<aid>/pay", methods=["POST"])
 @login_required
-def transaction_create_sumbit(aid):
+def transaction_create_submit(aid):
     form = TransactionCreate(request.form)
     if form.validate_on_submit():
         new_t = Transaction(
             amount=request.form.get("amount"),
-            aid=request.form.get("aid"),
+            aid=aid,
             status=request.form.get("status"),
             date=datetime.datetime.now(),
         )
@@ -198,7 +196,7 @@ def transaction_edit(tid):
         "bills/bill_form.html",
         form=form,
         title=u"Edit Transaction",
-        name=t.Account.name,
+        account=t.Account,
     )
 
 

@@ -1,0 +1,21 @@
+{% set total = namespace(value=0) %}
+{% set outstanding = namespace(value=0) %}
+<a href="{{ url_for('bills.transaction_create', aid=account.id) }}" class="button mb-1 is-fullwidth has-text-white has-background-success-dark">Pay Bill</a>
+<div class="">
+{% for t in transactions %}
+<a href="{{ url_for('bills.transaction_show', tid=t.id) }}" class="mb-1 {{ 'has-background-warning-light' if t.status == 'pending' else 'has-background-success-light' }} button is-fullwidth">
+    <div class="column has-text-left"> {{ t.date.strftime('%d %B %Y') }}</div>
+    <div class="column has-text-right">{{ "$%.2f"|format(t.amount) }}</div>
+</a>
+{% set total.value = total.value + t.amount %}
+{% if t.status == "pending" %}
+    {% set outstanding.value = outstanding.value + t.amount %}
+{% endif %}
+{% endfor %}
+</div>
+<a class="button is-fullwidth is-info mb-1">
+Total pending {{ "$%.2f"|format(outstanding.value) }}
+</a>
+<a class="button is-fullwidth is-info mb-1">
+Total {{ "$%.2f"|format(total.value) }}
+</a>

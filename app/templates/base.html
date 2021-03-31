@@ -19,7 +19,7 @@
       {% if messages %}
         {% for category, message in messages %}
         <article class="message {{ category }}">
-            <div class="message-body">{{ message }}</div>
+            <div class="message-body is-4 is-4-fullhd is-4-desktop is-6-tablet is-10-mobile">{{ message }}</div>
         </article>
         {% endfor %}
       {% endif %}
@@ -31,5 +31,6 @@
 </section>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://kit.fontawesome.com/86f34da8fc.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.prod.js') }}"></script>
 </body>
 </html>
