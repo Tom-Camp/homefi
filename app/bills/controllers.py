@@ -12,6 +12,7 @@ from sqlalchemy import exc
 from sqlalchemy import inspect
 
 from app import db
+from app.auth.forms import DeleteForm
 from app.bills.forms import AccountCreate
 from app.bills.forms import TransactionCreate
 from app.bills.models import Account
@@ -53,10 +54,46 @@ def account_create_submit():
     return redirect(url_for("bills.account_show", aid=new_acct.id))
 
 
-@bills.route("/account/<id>/delete")
+@bills.route("/account/<aid>/delete", methods=["GET"])
 @login_required
-def accout_delete(id):
-    """Delete account"""
+def account_delete(aid):
+    form = DeleteForm()
+    try:
+        a = db.session.query(Account).get(aid)
+    except exc.SQLAlchemyError:
+        flash("Error Loading Account", "is-danger")
+        return redirect(url_for("bills.account_list"))
+    message = str(
+        "Are you sure that you want to delete the account "
+        + a.name
+        + " and all of its associated transactions?"
+    ).format()
+    form.cid.data = aid
+
+    return render_template(
+        "delete_confirm.html",
+        message=message,
+        form=form,
+        title="Confirm Delete",
+    )
+
+
+# @TODO Not deleting
+@bills.route("/account/<aid>/delete", methods=["POST"])
+@login_required
+def account_delete_submit(aid):
+    a = db.session.query(Account).get(aid)
+    name = a.name
+    try:
+        db.session.delete(a)
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        flash("Error Deleting Account", "is-danger")
+        return redirect(url_for("bills.account_show", aid=aid))
+
+    flash_message = str("Deleted Account {}").format(name)
+    flash(flash_message, "is-danger")
+    return redirect(url_for("bills.dashboard"))
 
 
 @bills.route("/account/<aid>/edit", methods=["GET"])
@@ -64,23 +101,23 @@ def accout_delete(id):
 def account_edit(aid):
     form = AccountCreate(request.form)
     try:
-        u = db.session.query(Account).get(aid)
+        a = db.session.query(Account).get(aid)
     except exc.SQLAlchemyError:
         flash("Error Loading Account", "is-danger")
         return redirect(url_for("bills.account_list"))
 
-    if not u:
+    if not a:
         flash("Error Loading Account", "is-danger")
         return redirect(url_for("bills.account_list"))
 
-    form.name.data = u.name
-    form.recurrence.data = u.recurrence
-    form.pay_period.data = u.pay_period
-    form.status.data = u.status
-    form.outstanding.data = u.outstanding
-    form.apr.data = u.apr
-    form.tag.data = u.tag
-    form.url.data = u.url
+    form.name.data = a.name
+    form.recurrence.data = a.recurrence
+    form.pay_period.data = a.pay_period
+    form.status.data = a.status
+    form.outstanding.data = a.outstanding
+    form.apr.data = a.apr
+    form.tag.data = a.tag
+    form.url.data = a.url
 
     return render_template("bills/acct_form.html", form=form, title=u"Edit Account")
 
@@ -88,20 +125,20 @@ def account_edit(aid):
 @bills.route("/account/<aid>/edit", methods=["POST"])
 @login_required
 def account_edit_submit(aid):
-    u = db.session.query(Account).get(aid)
+    a = db.session.query(Account).get(aid)
     form = AccountCreate(request.form)
     if form.validate_on_submit():
-        u.name = request.form.get("name")
-        u.recurrence = request.form.get("recurrence")
-        u.pay_period = request.form.get("pay_period")
-        u.status = request.form.get("status")
-        u.outstanding = request.form.get("outstanding")
-        u.apr = request.form.get("apr")
-        u.tag = request.form.get("tag")
-        u.url = request.form.get("url")
+        a.name = request.form.get("name")
+        a.recurrence = request.form.get("recurrence")
+        a.pay_period = request.form.get("pay_period")
+        a.status = request.form.get("status")
+        a.outstanding = request.form.get("outstanding")
+        a.apr = request.form.get("apr")
+        a.tag = request.form.get("tag")
+        a.url = request.form.get("url")
         db.session.commit()
         flash("Account Updated", "is-success")
-        return redirect(url_for("bills.account_show", aid=u.id))
+        return redirect(url_for("bills.account_show", aid=a.id))
 
     return render_template("bills/acct_form.html", form=form, title=u"Edit Account")
 
@@ -110,7 +147,8 @@ def account_edit_submit(aid):
 @login_required
 def account_show(aid):
     a = Account.query.get(aid)
-    t = Transaction.query.filter_by(aid=aid).order_by(Transaction.date.desc())
+    t = Transaction.query.filter_by(aid=aid)
+    t.order_by(Transaction.date.desc())
     return render_template(
         "bills/account.html",
         account=a,

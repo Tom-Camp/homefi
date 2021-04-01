@@ -9,9 +9,13 @@ db = SQLAlchemy()
 csrf = CSRFProtect()
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.from_object("config")
+    if test_config is None:
+        app.config.from_object("config")
+    else:
+        app.config.from_mapping(test_config)
+
     csrf.init_app(app)
 
     @app.errorhandler(404)

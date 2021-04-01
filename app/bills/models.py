@@ -17,7 +17,9 @@ class Account(Base):
     tag = db.Column(db.String(128), nullable=False)
     url = db.Column(db.String(128), nullable=False)
     uid = db.Column(db.Integer, db.ForeignKey("user.id"))
-    transactions = db.relationship("Transaction")
+    transactions = db.relationship(
+        "Transaction", cascade="all,delete", backref="account"
+    )
 
     def __init__(
         self, name, recurrence, pay_period, outstanding, apr, tag, url, uid, status

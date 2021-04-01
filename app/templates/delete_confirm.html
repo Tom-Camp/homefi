@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="columns is-centered">
+    <div class="column is-4 is-4-fullhd is-4-desktop is-4-tablet is-12-mobile has-text-centered">
+        <div class="message is-danger p-2 is-size-4 has-text-weight-semibold">
+            {{ message }}
+        </div>
+        <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.cid(class_="hidden") }}
+        <div class="buttons is-centered">
+            <button class="button is-medium">Delete</button>
+            <a href="{{ url_for('bills.dashboard') }}" class="button is-medium">Cancel</a>
+        </div>
+        </form>
+    </div>
+  </div>
+{% endblock %}

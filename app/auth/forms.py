@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField
+from wtforms import HiddenField
 from wtforms import PasswordField
 from wtforms import StringField
 from wtforms import ValidationError
@@ -56,3 +57,12 @@ class RegistrationForm(FlaskForm):
         if user:
             msg = u"A user with this email address already exists."
             raise ValidationError(msg)
+
+
+class DeleteForm(FlaskForm):
+    cid = HiddenField(
+        "id",
+        validators=[
+            validators.DataRequired(),
+        ],
+    )

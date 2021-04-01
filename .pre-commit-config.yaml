@@ -11,7 +11,8 @@ exclude: |
     parser/.*|
     scripts/.*|
     util/.* |
-    app/static/node_packages/.*
+    app/static/node_packages/.* |
+    tests/conftest.py
   )$
 
 repos:

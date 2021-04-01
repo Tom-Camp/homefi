@@ -22,7 +22,8 @@
         {% if account.url|length %}
         <a class="button is-fullwidth is-info mb-1" href="{{ account.url }}" target="_blank" rel="noopener noreferrer">Website</a>
         {% endif %}
-        <a class="button is-fullwidth is-warning" href="{{ url_for('bills.account_edit', aid = account.id) }}">Edit</a>
+        <a class="button is-fullwidth is-warning mb-1" href="{{ url_for('bills.account_edit', aid = account.id) }}">Edit</a>
+        <a class="button is-fullwidth is-danger mb-1" href="{{ url_for('bills.account_delete', aid = account.id) }}">Delete</a>
     </div>
     <div class="column">
         <h5>Transactions</h5>
